@@ -20,6 +20,8 @@ For reagent integrity, it would be wise to first start with the domain with the 
 
 ## Data Integrity
 
+### Outline
+
  1. Plan for data hashing and submission at the point of acquisition.
     1. Research software and connectivity mechanisms.
     2. Identify how to source funding on the blockchain.
@@ -33,3 +35,32 @@ For reagent integrity, it would be wise to first start with the domain with the 
  3. Proposal to NIH
     1. Research current initiatives
     2. Contact Flow Repository to see if they would be willing to partner.
+
+### Revolution in Scientific Transparency
+
+These are the notes from the twitter space.
+
+ 1. Pasteur put in his will not to let anyone see his lab notebook.
+ 2. Fraud and abuse in science as shown by [Elisabeth
+    Bik](https://www.nature.com/articles/d41586-020-01363-z) in [her
+    twitter](https://twitter.com/MicrobiomDigest) along with
+    @mortenoxe, @TigerBB8 and @SmutClyde
+ 3. The field is pushing for more transparency, rigor, and reproducibility.
+	   1. [NIH policies and guidelines](https://www.niaid.nih.gov/grants-contracts/rigor-and-reproducibility-forms-f)
+	   2. [FlowRepository](https://flowrepository.org/) and the [role of Flow Cytometry](https://onlinelibrary.wiley.com/doi/10.1002/cyto.a.23940)
+	   3. [Journals](https://www.nature.com/articles/533452a)
+	   4. [Ngram](https://books.google.com/ngrams/graph?content=rigor+and+reproducibility&year_start=1800&year_end=2019&corpus=26&smoothing=3&direct_url=t1%3B%2Crigor%20and%20reproducibility%3B%2Cc0)
+	   5. [How-to guide](https://journals.asm.org/doi/10.1128/mBio.01902-16)
+ 4. Potential strategies to get started
+	   1. Hash data automatically and store hashes in NFTs on the blockchain.
+	   2. [Publishing](https://www.nature.com/articles/533452a)
+	   3. Publishing anonymously and verifying data authenticity
+	   4. VABrandon's note that QC and reagents could be stored
+       on-chain. I should say that probably hashes will be sufficient,
+       but we can do side-chains.
+ 5. Action items
+	   1. Task force to identify current projects and implement
+       proof-of-concept for data hashing
+	   2. Task force to imagine how an academic system of anonymous or
+       pseudonymous publishing would work (apropos of Charles Hoskinson)
+    3. We should speak with FlowJo at BD. 
