@@ -21,15 +21,15 @@ For reagent integrity, it would be wise to first start with the domain with the 
 ## Data Integrity
 
  1. Plan for data hashing and submission at the point of acquisition.
-   1. Research software and connectivity mechanisms.
-   2. Identify how to source funding on the blockchain.
-   3. Develop proof of concept.
+    1. Research software and connectivity mechanisms.
+    2. Identify how to source funding on the blockchain.
+    3. Develop proof of concept.
  2. Proposal to BD
-   1. Research current initiatives
-   2. Plan point of contact (audience)
-   3. Prepare presentation
-   4. Contact
-   5. Present
+    1. Research current initiatives
+    2. Plan point of contact (audience)
+    3. Prepare presentation
+    4. Contact
+    5. Present
  3. Proposal to NIH
-   1. Research current initiatives
-   2. Contact Flow Repository to see if they would be willing to partner.
+    1. Research current initiatives
+    2. Contact Flow Repository to see if they would be willing to partner.
