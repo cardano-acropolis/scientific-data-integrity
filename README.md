@@ -7,16 +7,16 @@ For reagent integrity, it would be wise to first start with the domain with the 
 ## Reagent Integrity
 
  1. Structure
-   1. Aggregate QC documents
-   2. Set up a common structure
+    1. Aggregate QC documents
+    2. Set up a common structure
  2. Common QC platforms
-   1. Research common QC platforms
-   2. Consider implementing an automated solution that integrates with the internal manufacturing step-verification involved medical testing reagents.
+    1. Research common QC platforms
+    2. Consider implementing an automated solution that integrates with the internal manufacturing step-verification involved medical testing reagents.
  3. PRISM
-   1. Set up PRISM identities and tracking for reagents.
+    1. Set up PRISM identities and tracking for reagents.
  4. Contact NIH, AMA, CDC, WHO, etc.
-   1. Find existing database standards.
-   2. Adapt to blockchain migration.
+    1. Find existing database standards.
+    2. Adapt to blockchain migration.
 
 ## Data Integrity
 
