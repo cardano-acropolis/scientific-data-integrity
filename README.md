@@ -41,6 +41,16 @@ with the highest stakes: namely medical testing.
     1. Research current initiatives
     2. Contact Flow Repository to see if they would be willing to
        partner.
+	   
+### Tasks
+
+ * [ ]  Task force to identify current projects and implement
+        proof-of-concept for data hashing
+ * [ ]  Task force to imagine how an academic system of anonymous or
+        pseudonymous publishing would work (apropos of Charles
+        Hoskinson)
+ * [ ]  We should speak with FlowJo at BD
+ * [ ]  Connect with the API developers for Flow Repository
 
 ### Revolution in Scientific Transparency
 
