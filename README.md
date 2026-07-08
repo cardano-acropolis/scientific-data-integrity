@@ -25,6 +25,11 @@ with the highest stakes: namely medical testing.
 
 ## Data Integrity
 
+See [`docs/data-integrity-technical-plan.md`](docs/data-integrity-technical-plan.md)
+for the technical plan: a secure-hardware necessity assessment, a phased
+software plan for a cross-platform hashing agent, and a survey of grants and
+partnerships.
+
 ### Outline
 
  1. Plan for data hashing and submission at the point of acquisition.
