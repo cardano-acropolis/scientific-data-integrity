@@ -159,9 +159,14 @@ I'll want to confirm this choice with you before scaffolding code.
 
 ### Phased roadmap
 
-- **Phase 0 — Spike (the README's requested deliverable).** Python CLI: hash a
-  local `.fcs`, build + sign a manifest, anchor on Cardano **preprod**, verify
-  end-to-end. Proves the loop.
+- **Phase 0 — Spike (the README's requested deliverable). ✅ Implemented in
+  [`../poc/`](../poc/).** Python CLI (`keygen` / `make-sample` / `commit` /
+  `verify`): hash a local `.fcs` (FCS-aware, separable TEXT/DATA hashes, Merkle
+  tree over event rows), build + sign an Ed25519 provenance manifest, and anchor
+  it. Runs end-to-end today against a **local** anchor backend; the **Cardano
+  preprod** backend (Blockfrost transaction metadata) is wired behind the same
+  interface and activates when `pycardano` + a funded preprod wallet + a
+  Blockfrost key are supplied.
 - **Phase 1 — Daemon.** Watched-folder agent + Merkle batching/anchoring service
   + verifier web page.
 - **Phase 2 — Integration.** FlowJo plugin / instrument export hook; full
