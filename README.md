@@ -25,6 +25,11 @@ with the highest stakes: namely medical testing.
 
 ## Data Integrity
 
+See [`docs/data-integrity-technical-plan.md`](docs/data-integrity-technical-plan.md)
+for the technical plan: a secure-hardware necessity assessment, a phased
+software plan for a cross-platform hashing agent, and a survey of grants and
+partnerships.
+
 ### Outline
 
  1. Plan for data hashing and submission at the point of acquisition.
@@ -51,6 +56,59 @@ with the highest stakes: namely medical testing.
         Hoskinson)
  * [ ]  We should speak with FlowJo at BD
  * [ ]  Connect with the API developers for Flow Repository
+
+### Risks of AI
+
+Generative AI sharpens exactly the threat this project exists to
+counter. It lowers the cost of fabrication while raising the cost of
+detection, so a strategy built on *catching* fakes after publication is
+losing ground every year. This is the core argument for anchoring
+provenance at the point of acquisition rather than policing outputs
+downstream.
+
+ 1. Fabrication at scale
+    1. Generative models can synthesize plausible raw data —
+       microscopy images, western blots, flow cytometry `.fcs` files,
+       spectra — that pass visual inspection and summary-statistic
+       checks.
+    2. Paper mills, already an industrial problem, gain throughput and
+       polish. What took a skilled forger now takes a prompt.
+    3. Synthetic data can be tuned to defeat the very anomaly detectors
+       (e.g. duplicate-image screens like those used by Elisabeth Bik)
+       that currently find fraud.
+ 2. The detection arms race is unwinnable head-on
+    1. Every detector becomes training signal for the next generator.
+    2. "AI-detector" tools are unreliable and produce false positives
+       that harm honest researchers, so they cannot be the sole gate.
+    3. Absence of a detectable artifact is not evidence of authenticity.
+ 3. Erosion of trust
+    1. Once reviewers assume any dataset *could* be synthetic, the
+       burden of proof inverts and legitimate work is harder to
+       publish.
+    2. Retractions and reproducibility failures compound the credibility
+       problem the field already faces.
+ 4. Why provenance beats detection
+    1. A cryptographic hash committed on-chain **at the moment of
+       acquisition**, from the instrument or capture software, binds the
+       data to a time and (pseudonymous) identity before any opportunity
+       to fabricate or edit.
+    2. Verification then asks "does this match what was recorded at
+       acquisition?" — a question AI cannot forge — instead of "does
+       this look fake?", which AI is built to defeat.
+    3. This shifts the trust anchor from the appearance of the data to
+       an immutable, timestamped commitment, and it is robust regardless
+       of how good generators become.
+ 5. Implications for this project
+    1. Hashing should live as close to the instrument/acquisition step
+       as possible; anything captured after the fact inherits the same
+       forgeability we are trying to eliminate.
+    2. The reagent workstream faces the mirror risk: AI-generated QC
+       documents and certificates of analysis. On-chain chain-of-custody
+       for reagents answers this the same way.
+    3. Threat model to keep in view: an adversary with the acquisition
+       device can still hash fabricated data, so device attestation and
+       trusted-capture paths are the harder, higher-value problem —
+       hashing alone proves *when*, not *that it is real*.
 
 ### Revolution in Scientific Transparency
 

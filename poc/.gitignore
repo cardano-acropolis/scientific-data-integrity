@@ -1,0 +1,8 @@
+# Runtime artifacts — regenerate with the CLI.
+__pycache__/
+*.pyc
+keys/
+anchors/
+manifest.json
+*.anchor.json
+bad.fcs

@@ -1,0 +1,8 @@
+# Core PoC — required for hash / manifest / sign / verify / local anchor.
+cryptography>=41
+
+# On-chain anchoring (optional). Only needed for `--backend cardano`, which
+# also requires a funded Cardano preprod wallet and BLOCKFROST_PROJECT_ID.
+# pycardano>=0.11
+# blockfrost-python>=0.6
+# requests>=2.28
