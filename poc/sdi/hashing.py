@@ -58,3 +58,47 @@ def chunk(data: bytes, size: int) -> list[bytes]:
     if size <= 0:
         raise ValueError("chunk size must be positive")
     return [data[i : i + size] for i in range(0, len(data), size)] or [b""]
+
+
+def _levels(blocks: list[bytes]) -> list[list[bytes]]:
+    """All tree levels, leaves first, root last. Odd levels duplicate the last
+    node so every non-root level has even length (matching ``merkle_root``)."""
+    level = [_leaf_hash(b) for b in blocks] if blocks else [_leaf_hash(b"")]
+    levels: list[list[bytes]] = []
+    while True:
+        if len(level) > 1 and len(level) % 2:
+            level = level + [level[-1]]
+        levels.append(level)
+        if len(level) == 1:
+            return levels
+        level = [_node_hash(level[i], level[i + 1]) for i in range(0, len(level), 2)]
+
+
+def merkle_proof(blocks: list[bytes], index: int) -> list[dict]:
+    """Audit path proving ``blocks[index]`` is under ``merkle_root(blocks)``.
+
+    Each step is ``{"h": sibling_hex, "side": "L"|"R"}`` where ``side`` is the
+    sibling's position relative to the running hash.
+    """
+    if not 0 <= index < len(blocks):
+        raise IndexError("index out of range")
+    levels = _levels(blocks)
+    proof: list[dict] = []
+    idx = index
+    for level in levels[:-1]:  # every level except the root
+        if idx % 2 == 0:
+            sibling, side = level[idx + 1], "R"
+        else:
+            sibling, side = level[idx - 1], "L"
+        proof.append({"h": sibling.hex(), "side": side})
+        idx //= 2
+    return proof
+
+
+def verify_merkle_proof(block: bytes, index: int, proof: list[dict], root: str) -> bool:
+    """Recompute the root from a leaf ``block`` and its audit path."""
+    h = _leaf_hash(block)
+    for step in proof:
+        sibling = bytes.fromhex(step["h"])
+        h = _node_hash(h, sibling) if step["side"] == "R" else _node_hash(sibling, h)
+    return h.hex() == root
