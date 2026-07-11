@@ -167,8 +167,12 @@ I'll want to confirm this choice with you before scaffolding code.
   preprod** backend (Blockfrost transaction metadata) is wired behind the same
   interface and activates when `pycardano` + a funded preprod wallet + a
   Blockfrost key are supplied.
-- **Phase 1 — Daemon.** Watched-folder agent + Merkle batching/anchoring service
-  + verifier web page.
+- **Phase 1 — Daemon. ◑ Mostly implemented in [`../poc/`](../poc/).**
+  Watched-folder agent (`sdi watch`, stdlib polling — no `watchdog` dependency)
+  and a Merkle **batching/anchoring** service (`sdi commit-batch`): many
+  manifests share one anchored root, each keeping an inclusion proof; `verify`
+  checks the proof and confirms the root. Still open: a static **verifier web
+  page**.
 - **Phase 2 — Integration.** FlowJo plugin / instrument export hook; full
   MIFlowCyt manifest; NFT (CIP-25/68) option; pseudonymous DID identity.
 - **Phase 3 — Attestation.** TPM/TEE Tier 2; BD-partnership instrument-key pilot

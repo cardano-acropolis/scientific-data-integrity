@@ -54,9 +54,11 @@ class AnchorReceipt:
 class AnchorBackend(Protocol):
     name: str
 
+    def anchor_commitment(self, commitment_id: str, metadata: dict) -> AnchorReceipt: ...
+
     def anchor(self, manifest: dict) -> AnchorReceipt: ...
 
-    def confirm(self, manifest_id: str, reference: str) -> tuple[bool, dict]: ...
+    def confirm(self, commitment_id: str, reference: str) -> tuple[bool, dict]: ...
 
 
 class LocalAnchor:
@@ -67,29 +69,34 @@ class LocalAnchor:
     def __init__(self, directory: str = "anchors") -> None:
         self.directory = directory
 
-    def anchor(self, manifest: dict) -> AnchorReceipt:
+    def anchor_commitment(self, commitment_id: str, metadata: dict) -> AnchorReceipt:
         os.makedirs(self.directory, exist_ok=True)
-        mid = manifest["signature"]["manifest_id"]
         ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         record = {
             "backend": self.name,
-            "manifest_id": mid,
+            "commitment_id": commitment_id,
             "timestamp": ts,
-            "metadata": build_metadata(manifest),
+            "metadata": metadata,
             "note": "LOCAL DEMO ANCHOR — not a blockchain; no distributed timestamp.",
         }
-        path = os.path.join(self.directory, f"{mid}.anchor.json")
+        path = os.path.join(self.directory, f"{commitment_id}.anchor.json")
         with open(path, "w") as fh:
             json.dump(record, fh, indent=2, sort_keys=True)
-        return AnchorReceipt(self.name, mid, path, ts, {"path": path})
+        return AnchorReceipt(self.name, commitment_id, path, ts, {"path": path})
 
-    def confirm(self, manifest_id: str, reference: str) -> tuple[bool, dict]:
+    def anchor(self, manifest: dict) -> AnchorReceipt:
+        return self.anchor_commitment(
+            manifest["signature"]["manifest_id"], build_metadata(manifest)
+        )
+
+    def confirm(self, commitment_id: str, reference: str) -> tuple[bool, dict]:
         try:
             with open(reference) as fh:
                 record = json.load(fh)
         except OSError as exc:
             return False, {"error": str(exc)}
-        ok = record.get("manifest_id") == manifest_id
+        stored = record.get("commitment_id", record.get("manifest_id"))
+        ok = stored == commitment_id
         return ok, {"timestamp": record.get("timestamp"), "note": record.get("note")}
 
 
@@ -127,7 +134,7 @@ class CardanoBlockfrostAnchor:
                 "to enable on-chain anchoring."
             ) from exc
 
-    def anchor(self, manifest: dict) -> AnchorReceipt:
+    def anchor_commitment(self, commitment_id: str, metadata: dict) -> AnchorReceipt:
         self._require()
         from pycardano import (
             BlockFrostChainContext, Network, Metadata, AuxiliaryData,
@@ -148,23 +155,27 @@ class CardanoBlockfrostAnchor:
         vkey = PaymentVerificationKey.from_signing_key(skey)
         address = Address(vkey.hash(), network=net)
 
-        metadata = AuxiliaryData(Metadata(build_metadata(manifest)))
+        aux = AuxiliaryData(Metadata(metadata))
         builder = TransactionBuilder(context)
         builder.add_input_address(address)
-        builder.auxiliary_data = metadata
+        builder.auxiliary_data = aux
         # Return change to self; a tiny self-payment carries the metadata tx.
         signed_tx = builder.build_and_sign([skey], change_address=address)
         context.submit_tx(signed_tx.to_cbor())
 
         tx_id = str(signed_tx.id)
         ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-        mid = manifest["signature"]["manifest_id"]
         return AnchorReceipt(
-            self.name, mid, tx_id, ts,
+            self.name, commitment_id, tx_id, ts,
             {"network": self.network, "tx": tx_id, "label": METADATA_LABEL},
         )
 
-    def confirm(self, manifest_id: str, reference: str) -> tuple[bool, dict]:
+    def anchor(self, manifest: dict) -> AnchorReceipt:
+        return self.anchor_commitment(
+            manifest["signature"]["manifest_id"], build_metadata(manifest)
+        )
+
+    def confirm(self, commitment_id: str, reference: str) -> tuple[bool, dict]:
         """Fetch tx metadata from Blockfrost and confirm the id is present."""
         import requests
 
@@ -184,7 +195,7 @@ class CardanoBlockfrostAnchor:
 
         found = any(
             str(entry.get("label")) == str(METADATA_LABEL)
-            and entry.get("json_metadata", {}).get("id") == manifest_id
+            and entry.get("json_metadata", {}).get("id") == commitment_id
             for entry in (meta if isinstance(meta, list) else [])
         )
         block_time = tx.get("block_time") if isinstance(tx, dict) else None
